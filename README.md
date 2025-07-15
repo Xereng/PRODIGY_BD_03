@@ -1,19 +1,14 @@
- Django project with JWT authentication, role-based access control, and CRUD functionality for user profiles (UUID, name, email, age):
-
----
-
 ```markdown
-# 🛡️ Django JWT Authentication with Role-Based Access & User Profile CRUD
+# 🛡️ Django JWT Auth + Role-Based Access + Profile CRUD 🔐
 
-This project is a secure Django RESTful API that implements:
+This project is a **secure Django REST API** that provides:
 
-- 🔐 JWT-based authentication
-- 👥 Role-based access control (`admin`, `user`, `owner`)
-- 🧾 Custom user model with role support
-- 🧍 Each user can create/update/view/delete their **own** profile (UUID, name, email, age)
-- 🛠 Admin can manage (CRUD) all users' profiles
-- ✅ Admin can control access to profile viewing
-- ⚙️ SQLite3 database with ORM (no in-memory)
+✨ JWT Authentication  
+🔐 Role-Based Access Control (`admin`, `user`, `owner`)  
+👤 Custom User Model  
+📝 Profile CRUD (UUID, Name, Email, Age)  
+📦 SQLite3 Persistent Database  
+🚫 Admin Hidden from Public Registration  
 
 ---
 
@@ -21,96 +16,126 @@ This project is a secure Django RESTful API that implements:
 
 ```
 
-├── Task03/                 # Main project
-│   └── settings.py         # Project settings
-│   └── urls.py             # Global URLs
-├── user\_auth/              # App for user management
-│   └── models.py           # CustomUser & Profile models
-│   └── views.py            # Registration, Login, Profile CRUD
-│   └── urls.py             # App-level routes
-│   └── serializers.py      # DRF serializers
-├── db.sqlite3              # SQLite3 database
+prodigy task 3/
+├── Task03/
+│   ├── settings.py       # Django settings
+│   ├── urls.py           # Root URL routing
+├── user\_auth/
+│   ├── models.py         # CustomUser & Profile model
+│   ├── serializers.py    # DRF serializers
+│   ├── views.py          # Register, Login, CRUD logic
+│   ├── urls.py           # App-level API routing
+├── db.sqlite3            # SQLite3 DB
 ├── manage.py
-└── .env                    # Optional for DB credentials
+├── .gitignore
+├── .venv/
 
 ````
 
 ---
 
-## 🛠 Requirements
+## 🚀 Features
 
-- Python 3.10+
-- Django 5.x
-- djangorestframework
-- djangorestframework-simplejwt
-- bcrypt
-- python-dotenv
+- ✅ **Register/Login** using Django REST Framework
+- 🔐 **JWT Token** authentication (`access`, `refresh`)
+- 👥 **CustomUser** model with roles: `admin`, `user`, `owner`
+- 🗂️ Each user can:
+  - Create & edit their profile (UUID, name, email, age)
+  - View only their data
+- 👑 **Admin**:
+  - Has full access to all users' data
+  - Can edit/delete any profile
+  - Can assign view access to other users
+- 📂 SQLite database (persistent storage)
+- 🔏 Passwords are hashed using **bcrypt**
 
 ---
 
-## ⚙️ Installation & Setup
+## 🛠 Installation
+
+1. **Clone the repo**
 
 ```bash
-# 1. Clone the repo
-git clone <your-repo-url>
-cd <project-folder>
-
-# 2. Create a virtual environment
-python -m venv .venv
-.venv\Scripts\activate  # Windows
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Run initial migrations
-python manage.py makemigrations
-python manage.py migrate
-
-# 5. Create a superuser (for admin access)
-python manage.py createsuperuser
-
-# 6. Start the development server
-python manage.py runserver
+git clone https://github.com/yourusername/your-repo.git
+cd your-repo
 ````
 
+2. **Set up virtual environment**
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate  # On Windows
+```
+
+3. **Install dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+4. **Apply migrations**
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+5. **Create superuser (admin)**
+
+```bash
+python manage.py createsuperuser
+```
+
+6. **Run the server**
+
+```bash
+python manage.py runserver
+```
+
 ---
 
-## 🔐 API Endpoints
+## 🧪 API Endpoints
 
-| Method | Endpoint         | Access         | Description                 |
-| ------ | ---------------- | -------------- | --------------------------- |
-| POST   | `/api/register/` | Public         | Register as regular `user`  |
-| POST   | `/api/login/`    | Public         | Login and receive JWT token |
-| GET    | `/api/profile/`  | Authenticated  | View your own profile       |
-| POST   | `/api/profile/`  | Authenticated  | Create your own profile     |
-| PUT    | `/api/profile/`  | Authenticated  | Update your own profile     |
-| DELETE | `/api/profile/`  | Authenticated  | Delete your own profile     |
-| GET    | `/api/users/`    | Admin + Shared | View all users (admin only) |
-| GET    | `/admin/`        | Superuser Only | Django admin interface      |
+| Method | Endpoint         | Access         | Description                    |
+| ------ | ---------------- | -------------- | ------------------------------ |
+| POST   | `/api/register/` | Public         | Register as regular user       |
+| POST   | `/api/login/`    | Public         | Login with username/password   |
+| GET    | `/api/profile/`  | Authenticated  | View own profile               |
+| POST   | `/api/profile/`  | Authenticated  | Create own profile             |
+| PUT    | `/api/profile/`  | Authenticated  | Update own profile             |
+| DELETE | `/api/profile/`  | Authenticated  | Delete own profile             |
+| GET    | `/api/users/`    | Admin Only     | View all user details          |
+| GET    | `/admin/`        | Superuser Only | Admin interface (hidden route) |
 
-> Note: Only **admin** can assign visibility of user data to others.
-
----
-
-## 👥 Roles
-
-* **Admin**: Full control via Django admin panel. Can manage any user profile.
-* **User**: Can register/login and manage their own profile (CRUD).
-* **Owner**: Reserved for future use (business-specific logic).
+> 💡 Only `admin` can assign which users have access to others' data.
 
 ---
 
-## 🔒 Authentication Flow
+## 👥 User Roles
 
-1. `POST /api/register/` – Creates a user (role is always `user`)
-2. `POST /api/login/` – Returns JWT tokens
-3. Authenticated routes require `Authorization: Bearer <access_token>` header
+| Role  | Permissions                                             |
+| ----- | ------------------------------------------------------- |
+| user  | Register/login, manage own profile only                 |
+| owner | Same as user (reserved for extended control later)      |
+| admin | Manage all users, assign access, and control the system |
 
 ---
 
-## 🗂 Environment Variables (Optional for production)
+## 🔐 Authentication
 
-Create a `.env` file:
+1. Register via `/api/register/`
+2. Login via `/api/login/` → get `access` and `refresh` tokens
+3. Use token in header:
+
+```
+Authorization: Bearer <access_token>
+```
+
+---
+
+## 📦 Environment Variables (optional)
+
+You can use `.env` and `python-dotenv` to secure sensitive data:
 
 ```env
 SECRET_KEY=your-secret-key
@@ -120,33 +145,59 @@ DATABASE_NAME=db.sqlite3
 
 ---
 
-## 📦 Future Improvements
+## ❌ Security Notes
 
-* Admin-based assignment of visibility
-* Token blacklist/logout support
-* Profile picture upload
-* Email confirmation
-
----
-
-## 📸 Screenshots
-
-*Not included — add Swagger UI or Postman collection if needed.*
+* Admin creation is **only** allowed through `createsuperuser`
+* Registration endpoint allows only `user` role
+* Admin dashboard is hidden at `/admin/`
 
 ---
 
-## 🧑‍💻 Author
+## ✅ To Push to GitHub
 
-Built with ❤️ using Django by \[Your Name]
+```bash
+git init
+git remote add origin https://github.com/yourusername/repo.git
+git add .
+git commit -m "Initial commit"
+git push -u origin main
+```
+
+---
+
+## 📂 .gitignore Example
+
+```gitignore
+*.pyc
+__pycache__/
+db.sqlite3
+.env
+.venv/
+.idea/
+*.log
+```
+
+---
+
+## 🧑‍💻 Built With
+
+* Django
+* Django REST Framework
+* SimpleJWT
+* bcrypt
+* SQLite3
 
 ---
 
 ## 📄 License
 
-This project is open-source and free to use.
-
-```
+Open-source project. Free to use and modify ✨
 
 ---
+
+## 🙋‍♂️ Author
+
+Built by **\[Your Name]**
+Feel free to contribute or suggest improvements!
 
 ```
