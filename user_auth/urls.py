@@ -1,8 +1,10 @@
 from django.urls import path
-from .views import RegisterView, LoginView, UserListView
+from .views import RegisterView, LoginView, ProfileView, ProfileCreateView, AllProfilesView
 
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('users/', UserListView.as_view(), name='users'),  # only visible after login
+    path('register/', RegisterView.as_view()),
+    path('login/', LoginView.as_view()),
+    path('profile/', ProfileView.as_view()),
+    path('profile/create/', ProfileCreateView.as_view()),
+    path('profiles/', AllProfilesView.as_view()),  # Admin or allowed users only
 ]
