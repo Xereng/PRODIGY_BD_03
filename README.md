@@ -16,19 +16,33 @@ This project is a **secure Django REST API** that provides:
 
 ```
 
-prodigy task 3/
+```
+prodigy-task-3/
 ├── Task03/
-│   ├── settings.py       # Django settings
-│   ├── urls.py           # Root URL routing
-├── user\_auth/
-│   ├── models.py         # CustomUser & Profile model
-│   ├── serializers.py    # DRF serializers
-│   ├── views.py          # Register, Login, CRUD logic
-│   ├── urls.py           # App-level API routing
-├── db.sqlite3            # SQLite3 DB
-├── manage.py
-├── .gitignore
-├── .venv/
+│   ├── __init__.py
+│   ├── settings.py       # 🔧 Django settings
+│   ├── urls.py           # 🌐 Root URL routing
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── user_auth/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py         # 🧍‍♂️ CustomUser & Profile models
+│   ├── serializers.py    # 🧬 DRF serializers
+│   ├── views.py          # 🚀 Register, Login, Profile CRUD logic
+│   ├── urls.py           # 🔗 App-level API routing
+│   ├── tests.py
+│   └── migrations/
+│       └── __init__.py
+│
+├── db.sqlite3            # 🗃️ SQLite3 database
+├── manage.py             # ⚙️ Django entry point
+├── .gitignore            # 🚫 Git ignored files (e.g., .venv, pycache)
+├── .venv/                # 🐍 Python virtual environment
+└── README.md             # 📘 Project documentation
+```
 
 ````
 
